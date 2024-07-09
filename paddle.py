@@ -1,0 +1,1 @@
+"""Class for paddle object in airhockey game"""
