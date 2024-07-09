@@ -1,0 +1,1 @@
+"""Class for puck in Air Hocky game"""
