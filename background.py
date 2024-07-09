@@ -1,0 +1,1 @@
+""" class for background in air hockey game """
