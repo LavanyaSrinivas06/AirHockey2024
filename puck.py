@@ -37,3 +37,9 @@ class Puck:
             self.y + self.radius > paddle.y and self.y - self.radius < paddle.y + paddle.height):
             self.vx = -self.vx * config.PUCK_SPEED_INCREASE  # Increase speed on collision
             self.vy = -self.vy * config.PUCK_SPEED_INCREASE  # Increase speed on collision
+    def reset(self, x, y):
+        self.x = x
+        self.y = y
+        self.vx = config.PUCK_INITIAL_SPEED
+        self.vy = config.PUCK_INITIAL_SPEED
+        self.started = False
