@@ -1,7 +1,7 @@
 import pygame
-import sys
-from puck import Puck
+import config
 from paddle import Paddle
+from puck import Puck
 from background import Background
 import config
 
