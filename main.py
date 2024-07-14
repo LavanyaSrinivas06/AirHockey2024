@@ -80,12 +80,12 @@ def main():
         paddle2.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, config.SCREEN_WIDTH // 2, config.SCREEN_WIDTH)
 
         # Check for scoring
-        if puck.x - puck.radius <= 0:  # Player 2 scores
+        if puck.x - puck.radius <= 0 and (config.SCREEN_HEIGHT // 2) - 100 < puck.y < (config.SCREEN_HEIGHT // 2) + 100:
             score2 += 1
-            reset_puck(puck)
-        elif puck.x + puck.radius >= config.SCREEN_WIDTH:  # Player 1 scores
+            puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
+        elif puck.x + puck.radius >= config.SCREEN_WIDTH and (config.SCREEN_HEIGHT // 2) - 100 < puck.y < (config.SCREEN_HEIGHT // 2) + 100:
             score1 += 1
-            reset_puck(puck)
+            puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
 
         # Draw everything
         background.draw(screen)
