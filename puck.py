@@ -33,10 +33,18 @@ class Puck:
         pygame.draw.circle(surface, self.color, (int(self.x), int(self.y)), self.radius)
         
     def check_collision_with_paddle(self, paddle):
-        if (self.x + self.radius > paddle.x and self.x - self.radius < paddle.x + paddle.width and
-            self.y + self.radius > paddle.y and self.y - self.radius < paddle.y + paddle.height):
-            self.vx = -self.vx * config.PUCK_SPEED_INCREASE  # Increase speed on collision
-            self.vy = -self.vy * config.PUCK_SPEED_INCREASE  # Increase speed on collision
+        #check collision with paddle
+
+        if (self.x + self.radius > paddle.x and 
+            self.x - self.radius < paddle.x + paddle.width and
+            self.y + self.radius > paddle.y and 
+            self.y - self.radius < paddle.y + paddle.height):
+            #check for the side of collision and adjust the speed to that.
+            if self.x < paddle.x or self.x > paddle.x + paddle.width:
+                self.vx = -self.vx * config.PUCK_SPEED_INCREASE # Increase speed on collision
+            if self.y < paddle.y or self.y > paddle.y + paddle.height:  
+                self.vy = -self.vy * config.PUCK_SPEED_INCREASE  # Increase speed on collision
+                
     def reset(self, x, y):
         self.x = x
         self.y = y
