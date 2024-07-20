@@ -8,9 +8,15 @@ from background import Background
 # Initialize Pygame
 pygame.init()
 
+
 def display_scores(screen, score1, score2, font):
-    score_text = font.render(f"Player 1: {score1}  Player 2: {score2}", True, (255, 255, 255))
-    screen.blit(score_text, (config.SCREEN_WIDTH // 2 - score_text.get_width() // 2, 20))
+    score_text = font.render(
+        f"Player 1: {score1}  Player 2: {score2}", True, (255, 255, 255)
+    )
+    screen.blit(
+        score_text, (config.SCREEN_WIDTH // 2 - score_text.get_width() // 2, 20)
+    )
+
 
 def reset_puck(puck):
     puck.x = config.SCREEN_WIDTH // 2
@@ -19,13 +25,34 @@ def reset_puck(puck):
     puck.vy = 0
     puck.started = False
 
+
 def main():
     screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
     pygame.display.set_caption("Air Hockey Game")
 
-    puck = Puck(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2, config.PUCK_RADIUS, config.PUCK_COLOR, config.PUCK_INITIAL_SPEED)
-    paddle1 = Paddle(10, (config.SCREEN_HEIGHT - config.PADDLE_HEIGHT) // 2, config.PADDLE_WIDTH, config.PADDLE_HEIGHT, config.PADDLE_COLOR_1, config.PADDLE_SPEED)
-    paddle2 = Paddle(config.SCREEN_WIDTH - config.PADDLE_WIDTH - 10, (config.SCREEN_HEIGHT - config.PADDLE_HEIGHT) // 2, config.PADDLE_WIDTH, config.PADDLE_HEIGHT, config.PADDLE_COLOR_2, config.PADDLE_SPEED)
+    puck = Puck(
+        config.SCREEN_WIDTH // 2,
+        config.SCREEN_HEIGHT // 2,
+        config.PUCK_RADIUS,
+        config.PUCK_COLOR,
+        config.PUCK_INITIAL_SPEED,
+    )
+    paddle1 = Paddle(
+        10,
+        (config.SCREEN_HEIGHT - config.PADDLE_HEIGHT) // 2,
+        config.PADDLE_WIDTH,
+        config.PADDLE_HEIGHT,
+        config.PADDLE_COLOR_1,
+        config.PADDLE_SPEED,
+    )
+    paddle2 = Paddle(
+        config.SCREEN_WIDTH - config.PADDLE_WIDTH - 10,
+        (config.SCREEN_HEIGHT - config.PADDLE_HEIGHT) // 2,
+        config.PADDLE_WIDTH,
+        config.PADDLE_HEIGHT,
+        config.PADDLE_COLOR_2,
+        config.PADDLE_SPEED,
+    )
     background = Background(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
 
     clock = pygame.time.Clock()
@@ -76,14 +103,31 @@ def main():
         puck.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
         puck.check_collision_with_paddle(paddle1)
         puck.check_collision_with_paddle(paddle2)
-        paddle1.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2)
-        paddle2.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, config.SCREEN_WIDTH // 2, config.SCREEN_WIDTH)
+        paddle1.update(
+            config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2
+        )
+        paddle2.update(
+            config.SCREEN_WIDTH,
+            config.SCREEN_HEIGHT,
+            config.SCREEN_WIDTH // 2,
+            config.SCREEN_WIDTH,
+        )
 
         # Check for scoring
-        if puck.x - puck.radius <= 0 and (config.SCREEN_HEIGHT // 2) - 100 < puck.y < (config.SCREEN_HEIGHT // 2) + 100:
+        if (
+            puck.x - puck.radius <= 0
+            and (config.SCREEN_HEIGHT // 2) - 100
+            < puck.y
+            < (config.SCREEN_HEIGHT // 2) + 100
+        ):
             score2 += 1
             puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
-        elif puck.x + puck.radius >= config.SCREEN_WIDTH and (config.SCREEN_HEIGHT // 2) - 100 < puck.y < (config.SCREEN_HEIGHT // 2) + 100:
+        elif (
+            puck.x + puck.radius >= config.SCREEN_WIDTH
+            and (config.SCREEN_HEIGHT // 2) - 100
+            < puck.y
+            < (config.SCREEN_HEIGHT // 2) + 100
+        ):
             score1 += 1
             puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
 
@@ -99,6 +143,7 @@ def main():
 
     pygame.quit()
     sys.exit()
+
 
 if __name__ == "__main__":
     main()
