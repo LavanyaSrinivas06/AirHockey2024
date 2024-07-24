@@ -7,7 +7,15 @@ from background import Background
 
 # Initialize Pygame
 pygame.init()
+#initialize the mixer for sound
+pygame.mixer.init()
 
+# Load sound effects
+paddle_hit_sound = pygame.mixer.Sound("paddle_hit.wav")  # Add the path to your paddle hit sound
+goal_sound = pygame.mixer.Sound("goal.wav")  # Add the path to your goal sound
+#set the volume of the sound effects
+paddle_hit_sound.set_volume(0.5)
+goal_sound.set_volume(0.5)
 
 def display_scores(screen, score1, score2, font):
     score_text = font.render(
@@ -17,14 +25,12 @@ def display_scores(screen, score1, score2, font):
         score_text, (config.SCREEN_WIDTH // 2 - score_text.get_width() // 2, 20)
     )
 
-
 def reset_puck(puck):
     puck.x = config.SCREEN_WIDTH // 2
     puck.y = config.SCREEN_HEIGHT // 2
     puck.vx = 0
     puck.vy = 0
     puck.started = False
-
 
 def main():
     screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
@@ -101,8 +107,11 @@ def main():
         # Update game objects
         background.update()
         puck.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
-        puck.check_collision_with_paddle(paddle1)
-        puck.check_collision_with_paddle(paddle2)
+
+        # Check for paddle collision and play sound
+        if puck.check_collision_with_paddle(paddle1) or puck.check_collision_with_paddle(paddle2):
+            paddle_hit_sound.play()
+
         paddle1.update(
             config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2
         )
@@ -121,6 +130,7 @@ def main():
             < (config.SCREEN_HEIGHT // 2) + 100
         ):
             score2 += 1
+            goal_sound.play()  # Play goal sound
             puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
         elif (
             puck.x + puck.radius >= config.SCREEN_WIDTH
@@ -129,6 +139,7 @@ def main():
             < (config.SCREEN_HEIGHT // 2) + 100
         ):
             score1 += 1
+            goal_sound.play()  # Play goal sound
             puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
 
         # Draw everything
@@ -143,7 +154,6 @@ def main():
 
     pygame.quit()
     sys.exit()
-
 
 if __name__ == "__main__":
     main()
