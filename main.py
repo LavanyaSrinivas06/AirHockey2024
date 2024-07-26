@@ -7,16 +7,29 @@ from background import Background
 
 # Initialize Pygame
 pygame.init()
-#initialize the mixer for sound
+# Initialize the mixer for sound
 pygame.mixer.init()
 
 # Load sound effects
 paddle_hit_sound = pygame.mixer.Sound("paddle_hit.wav")  # Add the path to your paddle hit sound
 goal_sound = pygame.mixer.Sound("goal.wav")  # Add the path to your goal sound
-#set the volume of the sound effects
+# Set the volume of the sound effects
 paddle_hit_sound.set_volume(0.5)
 goal_sound.set_volume(0.5)
 
+# Function to display the winner box with the score
+def display_winner(screen, winner, score1, score2):
+    font = pygame.font.Font(None, 74)
+    if winner == 1:
+        text = font.render(f"Player 1 Wins! Score: {score1}", True, (255, 255, 255))
+    else:
+        text = font.render(f"Player 2 Wins! Score: {score2}", True, (255, 255, 255))
+    text_rect = text.get_rect(center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2))
+    screen.blit(text, text_rect)
+    pygame.display.flip()
+    pygame.time.wait(3000)  # Wait for 3 seconds to show the winner
+
+# Function to display the scores
 def display_scores(screen, score1, score2, font):
     score_text = font.render(
         f"Player 1: {score1}  Player 2: {score2}", True, (255, 255, 255)
@@ -26,11 +39,7 @@ def display_scores(screen, score1, score2, font):
     )
 
 def reset_puck(puck):
-    puck.x = config.SCREEN_WIDTH // 2
-    puck.y = config.SCREEN_HEIGHT // 2
-    puck.vx = 0
-    puck.vy = 0
-    puck.started = False
+    puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
 
 def main():
     screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
@@ -63,11 +72,13 @@ def main():
 
     clock = pygame.time.Clock()
     font = pygame.font.Font(None, 74)
+    running = True
+    
     score1 = 0
     score2 = 0
-    running = True
+    games_played = 0
 
-    while running:
+    while running and games_played < 5:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -131,7 +142,8 @@ def main():
         ):
             score2 += 1
             goal_sound.play()  # Play goal sound
-            puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
+            reset_puck(puck)
+            games_played += 1
         elif (
             puck.x + puck.radius >= config.SCREEN_WIDTH
             and (config.SCREEN_HEIGHT // 2) - 100
@@ -140,7 +152,8 @@ def main():
         ):
             score1 += 1
             goal_sound.play()  # Play goal sound
-            puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
+            reset_puck(puck)
+            games_played += 1
 
         # Draw everything
         background.draw(screen)
@@ -148,9 +161,16 @@ def main():
         paddle1.draw(screen)
         paddle2.draw(screen)
         display_scores(screen, score1, score2, font)
-
+        
         pygame.display.flip()
         clock.tick(60)
+        
+    if score1 > score2:
+        winner = 1
+    else:
+        winner = 2
+
+    display_winner(screen, winner, score1, score2)
 
     pygame.quit()
     sys.exit()
