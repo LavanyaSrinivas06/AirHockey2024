@@ -9,8 +9,8 @@ class Puck:
         self.initial_y = y
         self.radius = radius
         self.color = color
-        self.vx = initial_speed  # Initial velocity in x direction
-        self.vy = initial_speed  # Initial velocity in y direction
+        self.vx = initial_speed  
+        self.vy = initial_speed  
         self.started = False
 
     def start(self):
@@ -23,7 +23,7 @@ class Puck:
             self.x += self.vx
             self.y += self.vy
 
-            # Check for collision with the walls and reverse direction if necessary
+            
             if self.x - self.radius <= 0 or self.x + self.radius >= screen_width:
                 self.vx = -self.vx
 
@@ -35,23 +35,21 @@ class Puck:
 
     def check_collision_with_paddle(self, paddle):
         collision = False
-        # Check collision with paddle
         if (
             self.x + self.radius > paddle.x
             and self.x - self.radius < paddle.x + paddle.width
             and self.y + self.radius > paddle.y
             and self.y - self.radius < paddle.y + paddle.height
         ):
-            collision = True # Collision detected
-            # Check for the side of collision and adjust the speed accordingly
+            collision = True 
             if self.x < paddle.x or self.x > paddle.x + paddle.width:
                 self.vx = (
                     -self.vx * config.PUCK_SPEED_INCREASE
-                )  # Increase speed on collision
+                )
             if self.y < paddle.y or self.y > paddle.y + paddle.height:
                 self.vy = (
                     -self.vy * config.PUCK_SPEED_INCREASE
-                )  # Increase speed on collision
+                )
         return collision
 
     def reset(self, x=None, y=None):
