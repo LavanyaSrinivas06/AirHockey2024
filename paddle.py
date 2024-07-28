@@ -4,6 +4,8 @@ import config
 
 class Paddle:
     def __init__(self, x, y, width, height, color, speed):
+        self.initial_x = x
+        self.initial_y = y
         self.x = x
         self.y = y
         self.width = width
@@ -12,6 +14,11 @@ class Paddle:
         self.speed = speed
         self.vx = 0  # Initial velocity in x direction
         self.vy = 0  # Initial velocity in y direction
+    def reset(self):
+        self.x = self.initial_x
+        self.y = self.initial_y
+        self.vx = 0
+        self.vy = 0
 
     def move_left(self):
         self.vx = -self.speed
