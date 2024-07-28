@@ -34,6 +34,7 @@ class Puck:
         pygame.draw.circle(surface, self.color, (int(self.x), int(self.y)), self.radius)
 
     def check_collision_with_paddle(self, paddle):
+        collision = False
         # Check collision with paddle
         if (
             self.x + self.radius > paddle.x
@@ -41,6 +42,7 @@ class Puck:
             and self.y + self.radius > paddle.y
             and self.y - self.radius < paddle.y + paddle.height
         ):
+            collision = True # Collision detected
             # Check for the side of collision and adjust the speed accordingly
             if self.x < paddle.x or self.x > paddle.x + paddle.width:
                 self.vx = (
@@ -50,6 +52,7 @@ class Puck:
                 self.vy = (
                     -self.vy * config.PUCK_SPEED_INCREASE
                 )  # Increase speed on collision
+        return collision
 
     def reset(self, x=None, y=None):
         if x is None:
