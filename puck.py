@@ -34,23 +34,38 @@ class Puck:
         pygame.draw.circle(surface, self.color, (int(self.x), int(self.y)), self.radius)
 
     def check_collision_with_paddle(self, paddle):
-        collision = False
         if (
             self.x + self.radius > paddle.x
             and self.x - self.radius < paddle.x + paddle.width
             and self.y + self.radius > paddle.y
             and self.y - self.radius < paddle.y + paddle.height
         ):
-            collision = True 
-            if self.x < paddle.x or self.x > paddle.x + paddle.width:
-                self.vx = (
-                    -self.vx * config.PUCK_SPEED_INCREASE
-                )
-            if self.y < paddle.y or self.y > paddle.y + paddle.height:
-                self.vy = (
-                    -self.vy * config.PUCK_SPEED_INCREASE
-                )
-        return collision
+            # Determine the overlap distance
+            overlap_x_left = self.x + self.radius - paddle.x
+            overlap_x_right = paddle.x + paddle.width - self.x + self.radius
+            overlap_y_top = self.y + self.radius - paddle.y
+            overlap_y_bottom = paddle.y + paddle.height - self.y + self.radius
+
+            if min(overlap_x_left, overlap_x_right) < min(overlap_y_top, overlap_y_bottom):
+                # Horizontal collision
+                self.vx = -self.vx * config.PUCK_SPEED_INCREASE
+                if overlap_x_left < overlap_x_right:
+                    self.x = paddle.x - self.radius
+                else:
+                    self.x = paddle.x + paddle.width + self.radius
+            else:
+                # Vertical collision
+                self.vy = -self.vy * config.PUCK_SPEED_INCREASE
+                if overlap_y_top < overlap_y_bottom:
+                    self.y = paddle.y - self.radius
+                else:
+                    self.y = paddle.y + paddle.height + self.radius
+
+            # Adjust the puck's velocity based on the paddle's movement
+            self.vx += paddle.vx * 0.5
+            self.vy += paddle.vy * 0.5
+            return True
+        return False
 
     def reset(self, x=None, y=None):
         if x is None:
