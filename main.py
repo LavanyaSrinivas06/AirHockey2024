@@ -100,6 +100,7 @@ def main():
         keys = pygame.key.get_pressed()
 
         if puck_moving:
+            # Paddle 1 controls
             if keys[pygame.K_w]:
                 paddle1.move_up()
             if keys[pygame.K_s]:
@@ -113,6 +114,7 @@ def main():
             if not keys[pygame.K_a] and not keys[pygame.K_d]:
                 paddle1.stop_horizontal()
 
+            # Paddle 2 controls
             if keys[pygame.K_UP]:
                 paddle2.move_up()
             if keys[pygame.K_DOWN]:
@@ -132,15 +134,9 @@ def main():
         if puck.check_collision_with_paddle(paddle1) or puck.check_collision_with_paddle(paddle2):
             paddle_hit_sound.play()
 
-        paddle1.update(
-            config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2
-        )
-        paddle2.update(
-            config.SCREEN_WIDTH,
-            config.SCREEN_HEIGHT,
-            config.SCREEN_WIDTH // 2,
-            config.SCREEN_WIDTH,
-        )
+        paddle1.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2)
+        paddle2.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, config.SCREEN_WIDTH // 2, config.SCREEN_WIDTH)
+
         if (
             puck.x - puck.radius <= 0
             and (config.SCREEN_HEIGHT // 2) - 100
