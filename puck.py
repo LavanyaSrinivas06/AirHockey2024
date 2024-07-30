@@ -1,9 +1,10 @@
 import pygame
 import config
+from typing import Tuple
 
 
 class Puck:
-    def __init__(self, x, y, radius, color, initial_speed):
+    def __init__(self, x: int, y: int, radius: int, color: Tuple[int, int, int], initial_speed: float) -> None:
         self.x = x
         self.y = y
         self.initial_x = x
@@ -19,7 +20,7 @@ class Puck:
         self.vy = config.PUCK_INITIAL_SPEED
         self.started = True
 
-    def update(self, screen_width, screen_height):
+    def update(self, screen_width: int, screen_height: int) -> None:
         if self.started:
             self.x += self.vx
             self.y += self.vy

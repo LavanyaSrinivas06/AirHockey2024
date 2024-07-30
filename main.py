@@ -15,7 +15,7 @@ paddle_hit_sound.set_volume(0.5)
 goal_sound.set_volume(0.5)
 
 
-def display_winner(screen, winner, score1, score2):
+def display_winner(screen: pygame.Surface, winner: int, score1: int, score2: int) -> None:
     font = pygame.font.Font(None, 74)
     if winner == 1:
         text = font.render(f"Player 1 Wins! Score: {score1}", True, (255, 255, 255))
@@ -55,7 +55,7 @@ def reset_game(puck, paddle1, paddle2):
     paddle2.reset()
 
 
-def main():
+def main()->None:
     screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
     pygame.display.set_caption("Air Hockey Game")
 
