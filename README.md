@@ -61,9 +61,10 @@ Quit Game: Press Q at any time.
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 **Reference**
-Sound:
-Tutorials used as reference :https://www.youtube.com/watch?v=g4ajJEyUDW4
-Chatgpt were used to generate some part of code
+Sound -goal:https://mixkit.co/free-sound-effects/goal/
+sound-hit: https://mixkit.co/free-sound-effects/hit/
+Tutorials used as reference (Just to get function and working of game idea , we used this as reference ):https://www.youtube.com/watch?v=g4ajJEyUDW4
+Chatgpt was used to generate some part of code.
 
 **Acknowledgments**
 Pygame library for game development.
