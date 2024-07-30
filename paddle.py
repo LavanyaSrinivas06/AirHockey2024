@@ -14,6 +14,7 @@ class Paddle:
         self.speed = speed
         self.vx = 0  # Initial velocity in x direction
         self.vy = 0  # Initial velocity in y direction
+
     def reset(self):
         self.x = self.initial_x
         self.y = self.initial_y
