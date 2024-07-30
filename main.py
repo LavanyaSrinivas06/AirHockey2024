@@ -21,18 +21,24 @@ def display_winner(screen, winner, score1, score2):
         text = font.render(f"Player 1 Wins! Score: {score1}", True, (255, 255, 255))
     else:
         text = font.render(f"Player 2 Wins! Score: {score2}", True, (255, 255, 255))
-    text_rect = text.get_rect(center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2))
+    text_rect = text.get_rect(
+        center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
+    )
     screen.blit(text, text_rect)
     pygame.display.flip()
     pygame.time.wait(3000)
 
+
 def display_game_ended(screen):
     font = pygame.font.Font(None, 74)
     text = font.render("Game Ended", True, (255, 255, 255))
-    text_rect = text.get_rect(center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2))
+    text_rect = text.get_rect(
+        center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
+    )
     screen.blit(text, text_rect)
     pygame.display.flip()
     pygame.time.wait(3000)
+
 
 def display_scores(screen, score1, score2, font):
     score_text = font.render(
@@ -42,10 +48,12 @@ def display_scores(screen, score1, score2, font):
         score_text, (config.SCREEN_WIDTH // 2 - score_text.get_width() // 2, 20)
     )
 
+
 def reset_game(puck, paddle1, paddle2):
     puck.reset(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
     paddle1.reset()
     paddle2.reset()
+
 
 def main():
     screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
@@ -79,7 +87,7 @@ def main():
     clock = pygame.time.Clock()
     font = pygame.font.Font(None, 74)
     running = True
-    
+
     score1 = 0
     score2 = 0
     games_played = 0
@@ -131,11 +139,20 @@ def main():
         background.update()
         puck.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
 
-        if puck.check_collision_with_paddle(paddle1) or puck.check_collision_with_paddle(paddle2):
+        if puck.check_collision_with_paddle(
+            paddle1
+        ) or puck.check_collision_with_paddle(paddle2):
             paddle_hit_sound.play()
 
-        paddle1.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2)
-        paddle2.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, config.SCREEN_WIDTH // 2, config.SCREEN_WIDTH)
+        paddle1.update(
+            config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2
+        )
+        paddle2.update(
+            config.SCREEN_WIDTH,
+            config.SCREEN_HEIGHT,
+            config.SCREEN_WIDTH // 2,
+            config.SCREEN_WIDTH,
+        )
 
         if (
             puck.x - puck.radius <= 0
@@ -144,7 +161,7 @@ def main():
             < (config.SCREEN_HEIGHT // 2) + 100
         ):
             score2 += 1
-            goal_sound.play() 
+            goal_sound.play()
             reset_game(puck, paddle1, paddle2)
             puck_moving = False
             games_played += 1
@@ -165,7 +182,7 @@ def main():
         paddle1.draw(screen)
         paddle2.draw(screen)
         display_scores(screen, score1, score2, font)
-        
+
         pygame.display.flip()
         clock.tick(60)
 
@@ -183,14 +200,19 @@ def main():
             display_game_ended(screen)
         else:
             font = pygame.font.Font(None, 74)
-            text = font.render(f"Game Tied! Score: {score1}-{score2}", True, (255, 255, 255))
-            text_rect = text.get_rect(center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2))
+            text = font.render(
+                f"Game Tied! Score: {score1}-{score2}", True, (255, 255, 255)
+            )
+            text_rect = text.get_rect(
+                center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
+            )
             screen.blit(text, text_rect)
             pygame.display.flip()
             pygame.time.wait(3000)
 
     pygame.quit()
     sys.exit()
+
 
 if __name__ == "__main__":
     main()
