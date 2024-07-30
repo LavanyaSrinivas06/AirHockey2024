@@ -15,12 +15,13 @@ paddle_hit_sound.set_volume(0.5)
 goal_sound.set_volume(0.5)
 
 
-def display_winner(screen: pygame.Surface, winner: int, score1: int, score2: int) -> None:
+def display_winner(screen, winner, score1, score2):
     font = pygame.font.Font(None, 74)
-    if winner == 1:
-        text = font.render(f"Player 1 Wins! Score: {score1}", True, (255, 255, 255))
-    else:
-        text = font.render(f"Player 2 Wins! Score: {score2}", True, (255, 255, 255))
+    text = font.render(
+        f"Player {winner} Wins! Score: {score1 if winner == 1 else score2}",
+        True,
+        (255, 255, 255),
+    )
     text_rect = text.get_rect(
         center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
     )
@@ -55,10 +56,9 @@ def reset_game(puck, paddle1, paddle2):
     paddle2.reset()
 
 
-def main()->None:
+def setup():
     screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
     pygame.display.set_caption("Air Hockey Game")
-
     puck = Puck(
         config.SCREEN_WIDTH // 2,
         config.SCREEN_HEIGHT // 2,
@@ -83,133 +83,125 @@ def main()->None:
         config.PADDLE_SPEED,
     )
     background = Background(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
-
     clock = pygame.time.Clock()
     font = pygame.font.Font(None, 74)
-    running = True
+    return screen, puck, paddle1, paddle2, background, clock, font
 
-    score1 = 0
-    score2 = 0
-    games_played = 0
 
-    puck_moving = False
+def handle_events(puck):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            return False
+        elif event.type == pygame.MOUSEBUTTONDOWN and not puck.started:
+            puck.start()
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+            return False
+    return True
+
+
+def handle_paddle_controls(keys, paddle1, paddle2, puck_started):
+    if puck_started:
+        if keys[pygame.K_w]:
+            paddle1.move_up()
+        if keys[pygame.K_s]:
+            paddle1.move_down()
+        if keys[pygame.K_a]:
+            paddle1.move_left()
+        if keys[pygame.K_d]:
+            paddle1.move_right()
+        if not keys[pygame.K_w] and not keys[pygame.K_s]:
+            paddle1.stop_vertical()
+        if not keys[pygame.K_a] and not keys[pygame.K_d]:
+            paddle1.stop_horizontal()
+        if keys[pygame.K_UP]:
+            paddle2.move_up()
+        if keys[pygame.K_DOWN]:
+            paddle2.move_down()
+        if keys[pygame.K_LEFT]:
+            paddle2.move_left()
+        if keys[pygame.K_RIGHT]:
+            paddle2.move_right()
+        if not keys[pygame.K_UP] and not keys[pygame.K_DOWN]:
+            paddle2.stop_vertical()
+        if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
+            paddle2.stop_horizontal()
+
+
+def update_game(paddle1, paddle2, puck, puck_moving):
+    puck.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
+    if puck.check_collision_with_paddle(paddle1) or puck.check_collision_with_paddle(
+        paddle2
+    ):
+        paddle_hit_sound.play()
+    paddle1.update(
+        config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2
+    )
+    paddle2.update(
+        config.SCREEN_WIDTH,
+        config.SCREEN_HEIGHT,
+        config.SCREEN_WIDTH // 2,
+        config.SCREEN_WIDTH,
+    )
+    return puck_moving
+
+
+def check_goal(puck, score1, score2, puck_moving, games_played, paddle1, paddle2):
+    if (
+        puck.x - puck.radius <= 0
+        and (config.SCREEN_HEIGHT // 2) - 100
+        < puck.y
+        < (config.SCREEN_HEIGHT // 2) + 100
+    ):
+        score2 += 1
+        goal_sound.play()
+        reset_game(puck, paddle1, paddle2)
+        puck_moving = False
+        games_played += 1
+    elif (
+        puck.x + puck.radius >= config.SCREEN_WIDTH
+        and (config.SCREEN_HEIGHT // 2) - 100
+        < puck.y
+        < (config.SCREEN_HEIGHT // 2) + 100
+    ):
+        score1 += 1
+        goal_sound.play()
+        reset_game(puck, paddle1, paddle2)
+        puck_moving = False
+        games_played += 1
+    return score1, score2, puck_moving, games_played
+
+
+def draw(screen, background, puck, paddle1, paddle2, score1, score2, font):
+    background.update()
+    background.draw(screen)
+    puck.draw(screen)
+    paddle1.draw(screen)
+    paddle2.draw(screen)
+    display_scores(screen, score1, score2, font)
+    pygame.display.flip()
+
+
+def main():
+    screen, puck, paddle1, paddle2, background, clock, font = setup()
+    score1 = score2 = games_played = 0
+    running = puck_moving = True
+    puck_started = False
 
     while running and games_played < 5:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and not puck.started:
-                puck.start()
-                puck_moving = True
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    running = False
-
+        running = handle_events(puck)
         keys = pygame.key.get_pressed()
-
-        if puck_moving:
-            # Paddle 1 controls
-            if keys[pygame.K_w]:
-                paddle1.move_up()
-            if keys[pygame.K_s]:
-                paddle1.move_down()
-            if keys[pygame.K_a]:
-                paddle1.move_left()
-            if keys[pygame.K_d]:
-                paddle1.move_right()
-            if not keys[pygame.K_w] and not keys[pygame.K_s]:
-                paddle1.stop_vertical()
-            if not keys[pygame.K_a] and not keys[pygame.K_d]:
-                paddle1.stop_horizontal()
-
-            # Paddle 2 controls
-            if keys[pygame.K_UP]:
-                paddle2.move_up()
-            if keys[pygame.K_DOWN]:
-                paddle2.move_down()
-            if keys[pygame.K_LEFT]:
-                paddle2.move_left()
-            if keys[pygame.K_RIGHT]:
-                paddle2.move_right()
-            if not keys[pygame.K_UP] and not keys[pygame.K_DOWN]:
-                paddle2.stop_vertical()
-            if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
-                paddle2.stop_horizontal()
-
-        background.update()
-        puck.update(config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
-
-        if puck.check_collision_with_paddle(
-            paddle1
-        ) or puck.check_collision_with_paddle(paddle2):
-            paddle_hit_sound.play()
-
-        paddle1.update(
-            config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 0, config.SCREEN_WIDTH // 2
+        handle_paddle_controls(keys, paddle1, paddle2, puck.started)
+        puck_moving = update_game(paddle1, paddle2, puck, puck_moving)
+        score1, score2, puck_moving, games_played = check_goal(
+            puck, score1, score2, puck_moving, games_played, paddle1, paddle2
         )
-        paddle2.update(
-            config.SCREEN_WIDTH,
-            config.SCREEN_HEIGHT,
-            config.SCREEN_WIDTH // 2,
-            config.SCREEN_WIDTH,
-        )
-
-        if (
-            puck.x - puck.radius <= 0
-            and (config.SCREEN_HEIGHT // 2) - 100
-            < puck.y
-            < (config.SCREEN_HEIGHT // 2) + 100
-        ):
-            score2 += 1
-            goal_sound.play()
-            reset_game(puck, paddle1, paddle2)
-            puck_moving = False
-            games_played += 1
-        elif (
-            puck.x + puck.radius >= config.SCREEN_WIDTH
-            and (config.SCREEN_HEIGHT // 2) - 100
-            < puck.y
-            < (config.SCREEN_HEIGHT // 2) + 100
-        ):
-            score1 += 1
-            goal_sound.play()
-            reset_game(puck, paddle1, paddle2)
-            puck_moving = False
-            games_played += 1
-
-        background.draw(screen)
-        puck.draw(screen)
-        paddle1.draw(screen)
-        paddle2.draw(screen)
-        display_scores(screen, score1, score2, font)
-
-        pygame.display.flip()
+        draw(screen, background, puck, paddle1, paddle2, score1, score2, font)
         clock.tick(60)
 
-    if score1 > score2:
-        winner = 1
-    elif score2 > score1:
-        winner = 2
+    if score1 != score2:
+        display_winner(screen, 1 if score1 > score2 else 2, score1, score2)
     else:
-        winner = None
-
-    if winner is not None:
-        display_winner(screen, winner, score1, score2)
-    else:
-        if score1 == 0 and score2 == 0:
-            display_game_ended(screen)
-        else:
-            font = pygame.font.Font(None, 74)
-            text = font.render(
-                f"Game Tied! Score: {score1}-{score2}", True, (255, 255, 255)
-            )
-            text_rect = text.get_rect(
-                center=(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT // 2)
-            )
-            screen.blit(text, text_rect)
-            pygame.display.flip()
-            pygame.time.wait(3000)
-
+        display_game_ended(screen)
     pygame.quit()
     sys.exit()
 
