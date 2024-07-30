@@ -1,9 +1,10 @@
 import pygame
 import config
+from typing import Tuple
 
 
 class Paddle:
-    def __init__(self, x, y, width, height, color, speed):
+    def __init__(self, x: int, y: int, width: int, height: int, color: Tuple[int, int, int], speed: float) -> None:
         self.initial_x = x
         self.initial_y = y
         self.x = x
@@ -39,7 +40,7 @@ class Paddle:
     def stop_vertical(self):
         self.vy = 0
 
-    def update(self, screen_width, screen_height, left_bound, right_bound):
+    def update(self, screen_width: int, screen_height: int, left_bound: int, right_bound: int) -> None:
         self.x += self.vx
         self.y += self.vy
 
