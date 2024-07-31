@@ -57,6 +57,11 @@ To install AirHockey, follow these steps:
     Move Right: RIGHT Arrow Key
 Quit Game: Press Q at any time.
 
+## Class diagram and Sequence diagram
+![Class diagram](https://github.com/user-attachments/assets/bd72ad5e-31dd-4069-9f64-b458a8371508)
+![Sequence Diagram](https://github.com/user-attachments/assets/31298aff-8604-4169-bb67-20928ef7b614)
+
+
 **License**
 This project is licensed under the MIT License - see the LICENSE file for details.
 
