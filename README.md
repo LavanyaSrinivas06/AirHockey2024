@@ -74,3 +74,8 @@ Chatgpt was used to generate some part of code.
 **Acknowledgments**
 Pygame library for game development.
 Open-source resources for sound effects.
+
+**Contributors**
+Ruchitha Prakash - Ruchitha1111
+Tanishqa Venkatram - TanishqaVenkatram
+Lavanya Srinivas - LavanyaSrinivas06
