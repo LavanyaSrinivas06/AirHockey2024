@@ -62,25 +62,30 @@ Quit Game: Press Q at any time.
 ![Sequence Diagram](https://github.com/user-attachments/assets/31298aff-8604-4169-bb67-20928ef7b614)
 
 
-**License**
+### License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-**Reference**
+### Reference
 Sound -goal:https://mixkit.co/free-sound-effects/goal/
+
 sound-hit: https://mixkit.co/free-sound-effects/hit/
+
 Tutorials used as reference (Just to get function and working of game idea , we used this as reference ):https://www.youtube.com/watch?v=g4ajJEyUDW4
+
 Chatgpt was used to generate some part of code.
 
-**Acknowledgments**
+### Acknowledgments
 Pygame library for game development.
 Open-source resources for sound effects.
 
-## Contributors
+### Contributors
 
 This project is privately owned by Lavanya,Ruchitha and Tanishqa, students at SRH Berlin University of Applied Sciences pursuing an MSc in Computer Science, Focused on Big Data and Artificial Intelligence.
 
 Contact Information:
 
 Ruchitha Prakash - Ruchitha1111
+
 Tanishqa Venkatram - TanishqaVenkatram
+
 Lavanya Srinivas - LavanyaSrinivas06
