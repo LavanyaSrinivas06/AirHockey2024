@@ -75,7 +75,12 @@ Chatgpt was used to generate some part of code.
 Pygame library for game development.
 Open-source resources for sound effects.
 
-**Contributors**
+## Contributors
+
+This project is privately owned by Lavanya,Ruchitha and Tanishqa, students at SRH Berlin University of Applied Sciences pursuing an MSc in Computer Science, Focused on Big Data and Artificial Intelligence.
+
+Contact Information:
+
 Ruchitha Prakash - Ruchitha1111
 Tanishqa Venkatram - TanishqaVenkatram
 Lavanya Srinivas - LavanyaSrinivas06
